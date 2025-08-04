@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Tetris.ethOS</title>
   <style>
     body {
@@ -70,6 +70,12 @@
       background: #00ffaa;
     }
 
+    #usernameDisplay {
+      margin-top: 5px;
+      font-size: 14px;
+      color: #aaa;
+    }
+
     @media (min-width: 500px) {
       h1 { font-size: 28px; }
       #score { font-size: 18px; }
@@ -79,10 +85,10 @@
 <body>
   <img id="logo" src="IMG_5753.jpeg" alt="ethOS Logo" />
   <h1>Tetris.ethOS</h1>
+  <div id="usernameDisplay"></div>
   <canvas id="tetris" width="240" height="400"></canvas>
   <div id="score">Score: 0</div>
 
-  <!-- Kontrol Tombol -->
   <div class="controls">
     <button class="btn" onclick="playerMove(-1)">←</button>
     <button class="btn" onclick="playerRotate(-1)">⤾</button>
@@ -96,23 +102,21 @@
     const context = canvas.getContext('2d');
     context.scale(20, 20);
 
-    const arena = createMatrix(12, 20);
+    let username = '';
+    function askUsername() {
+      username = prompt("Enter your ethOS username:", "");
+      if (!username) username = "Guest";
+      document.getElementById("usernameDisplay").innerText = "Welcome, " + username;
+    }
+    askUsername();
 
-    const player = {
-      pos: {x: 0, y: 0},
-      matrix: null,
-      score: 0
-    };
+    const arena = createMatrix(12, 20);
+    const player = { pos: {x: 0, y: 0}, matrix: null, score: 0 };
 
     const colors = [
       null,
-      '#00ffff', // I
-      '#ffff00', // O
-      '#aa00ff', // T
-      '#00ff00', // S
-      '#ff0044', // Z
-      '#0066ff', // J
-      '#ffaa00', // L
+      '#00ffff', '#ffff00', '#aa00ff',
+      '#00ff00', '#ff0044', '#0066ff', '#ffaa00',
     ];
 
     function createMatrix(w, h) {
